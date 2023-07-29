@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
     function makeNumberRenderer(key) {
         return (data, type, row) => {
             const val = row[key];
@@ -14,9 +14,9 @@ $(document).ready(function() {
             if (typeof statsData === "string") {
                 statsData = JSON.parse(statsData);
             }
-        } catch (e) {/* ignored */}
+        } catch (e) {/* ignored */ }
         if (statsData && statsData.toplist) {
-            const whoamiRoot = "/";
+            const whoamiRoot = "https://pxls.gamestreaker.de/";
             $.ajax({
                 url: `${whoamiRoot}whoami`,
                 xhrFields: {
@@ -27,7 +27,7 @@ $(document).ready(function() {
                     if (typeof authData === "string") {
                         authData = JSON.parse(authData);
                     }
-                } catch (e) {/* ignored */}
+                } catch (e) {/* ignored */ }
                 statsData.authData = authData;
             }).fail((data, textStatus, err) => {
                 console.error("Failed to fetch auth status. textStatus: %s, data: %o, error: %o", textStatus, data, err);
@@ -43,7 +43,7 @@ $(document).ready(function() {
     function handleTables(data) {
         console.log(data);
         var leaderboardColumns = [
-            {data: "place", searchable: false},
+            { data: "place", searchable: false },
             {
                 data: "username",
                 render: (data, type, row, meta) => {
@@ -99,7 +99,7 @@ $(document).ready(function() {
             data.general.nth_list.forEach(x => {
                 if (x.res !== false) {
                     let tr = _ce('tr'),
-                        tdName = _ce('td', {'class': 'text-right pr-2'}, `${x.pretty} pixel:`),
+                        tdName = _ce('td', { 'class': 'text-right pr-2' }, `${x.pretty} pixel:`),
                         tdValue = _ce('td', x.res);
                     tr.appendChild(tdName);
                     tr.appendChild(tdValue);
@@ -138,18 +138,18 @@ $(document).ready(function() {
             alltimeStanding.style.display = data.toplist.alltime.filter(x => x.username == data.authData.username).length ? "inline-block" : "none";
             thisCanvasStanding.style.display = data.toplist.canvas.filter(x => x.username == data.authData.username).length ? "inline-block" : "none";
             $(thisCanvasStanding).click(() => {
-                let node = tblToplistCurrent.row(function(idx, rowData) {
+                let node = tblToplistCurrent.row(function (idx, rowData) {
                     return rowData.username == data.authData.username;
                 }).node();
                 const scrollBody = $("#tblToplistCurrent").closest(".dataTables_scrollBody");
-                scrollBody.scrollTo(node, {offset: -Math.abs((scrollBody[0].getBoundingClientRect().height / 2) - (node.getBoundingClientRect().height / 2))});
+                scrollBody.scrollTo(node, { offset: -Math.abs((scrollBody[0].getBoundingClientRect().height / 2) - (node.getBoundingClientRect().height / 2)) });
             });
             $(alltimeStanding).click(() => {
-                let node = tblToplistAlltime.row(function(idx, rowData) {
+                let node = tblToplistAlltime.row(function (idx, rowData) {
                     return rowData.username == data.authData.username;
                 }).node();
                 const scrollBody = $("#tblToplistAlltime").closest(".dataTables_scrollBody");
-                scrollBody.scrollTo(node, {offset: -Math.abs((scrollBody[0].getBoundingClientRect().height / 2) - (node.getBoundingClientRect().height / 2))});
+                scrollBody.scrollTo(node, { offset: -Math.abs((scrollBody[0].getBoundingClientRect().height / 2) - (node.getBoundingClientRect().height / 2)) });
             });
         } else {
             alltimeStanding.style.display = "none";
@@ -158,19 +158,19 @@ $(document).ready(function() {
         $(".gscLoading").remove();
     }
 
-    function generateBreakdownSection(headerString, data, board_info, auth_data, zero_based_colors=true) {
+    function generateBreakdownSection(headerString, data, board_info, auth_data, zero_based_colors = true) {
         let
-            wrapper = _ce("div", {class: "breakdown"}),
-            header = _ce("h4", {class: "text-center"}, headerString),
-            groupHolder = _ce("div", {class: "row justify-content-between"}),
-            groupTopUsers = _ce("div", {class: "col-md-6"}),
-            groupTopColors = _ce("div", {class: "col-md-6"});
+            wrapper = _ce("div", { class: "breakdown" }),
+            header = _ce("h4", { class: "text-center" }, headerString),
+            groupHolder = _ce("div", { class: "row justify-content-between" }),
+            groupTopUsers = _ce("div", { class: "col-md-6" }),
+            groupTopColors = _ce("div", { class: "col-md-6" });
         groupTopUsers.appendChild(_ce("h6", "Top 10 users"));
         groupTopColors.appendChild(_ce("h6", "Top 10 colors"));
         wrapper.appendChild(header);
 
         {
-            let table = _ce("table", {class: "table table-bordered table-striped table-hover"}),
+            let table = _ce("table", { class: "table table-bordered table-striped table-hover" }),
                 thead = _ce("thead"),
                 tbody = _ce("tbody");
             thead.appendChild(generateTableRow(true, "Place", "Username", "Pixels"));
@@ -181,7 +181,7 @@ $(document).ready(function() {
             let tableOpts = {
                 data: data.users,
                 columns: [
-                    {data: "place", searchable: false},
+                    { data: "place", searchable: false },
                     {
                         data: "username",
                         render: (data, type, row, meta) => {
@@ -208,7 +208,7 @@ $(document).ready(function() {
         }
 
         {
-            let table = _ce("table", {class: "table table-bordered table-striped table-hover"}),
+            let table = _ce("table", { class: "table table-bordered table-striped table-hover" }),
                 thead = _ce("thead"),
                 tbody = _ce("tbody");
             thead.appendChild(generateTableRow(true, "Place", "Color", "Count"));
@@ -220,13 +220,13 @@ $(document).ready(function() {
                 $(table).DataTable({
                     data: data.colors,
                     columns: [
-                        {data: "place"},
+                        { data: "place" },
                         {
-                            data: "colorID", render: function(renderData, type, row, meta) {
+                            data: "colorID", render: function (renderData, type, row, meta) {
                                 return `<div class="pixelColor" style="background-color:#${board_info.palette[renderData].value}"></div> ${renderData + (zero_based_colors ? 0 : 1)}`;
                             }
                         },
-                        {data: "count"}
+                        { data: "count" }
                     ],
                     searching: false,
                     paging: false
